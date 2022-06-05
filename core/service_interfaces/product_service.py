@@ -1,7 +1,4 @@
-import http
 from abc import ABC, abstractmethod
-
-from starlette.exceptions import HTTPException
 
 from core.models.product import Product
 from core.models.user import User
@@ -10,7 +7,15 @@ from core.models.user import User
 class ProductService(ABC):
 
     @abstractmethod
+    def get_by_name(self, name: str) -> Product:
+        raise NotImplementedError()
+
+    @abstractmethod
     def create(self, name: str, price: int, description: str) -> Product:
+        raise NotImplementedError()
+
+    @abstractmethod
+    def create_if_not_exist(self, name: str, price: int, description: str) -> Product:
         raise NotImplementedError()
 
     @abstractmethod

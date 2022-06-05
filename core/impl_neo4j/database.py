@@ -36,7 +36,7 @@ class Neo4jDatabaseBackend(DatabaseBackend):
                         " FOR (place:Place) REQUIRE place.source_id IS UNIQUE")
 
             # places spatial index
-            session.run("CREATE INDEX node_index_name IF NOT EXISTS FOR (p:Place) ON (p.location)")
+            session.run("CREATE INDEX location_spatial_index IF NOT EXISTS FOR (p:Place) ON (p.location)")
 
             # user constraints
             session.run("CREATE CONSTRAINT user_email_uniqueness IF NOT EXISTS"
@@ -45,6 +45,8 @@ class Neo4jDatabaseBackend(DatabaseBackend):
                         " FOR (user:User) REQUIRE user.email IS NOT NULL")
             session.run("CREATE CONSTRAINT user_username_uniqueness IF NOT EXISTS"
                         " FOR (user:User) REQUIRE user.username IS UNIQUE")
+            ...
+
             session.run("CREATE CONSTRAINT user_username_existence IF NOT EXISTS"
                         " FOR (user:User) REQUIRE user.username IS NOT NULL")
             session.run("CREATE CONSTRAINT user_password_existence IF NOT EXISTS"

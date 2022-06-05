@@ -11,5 +11,5 @@ class User(BaseModel):
     password: str
     balance: float
     created_on: datetime.datetime
-    last_login: datetime.datetime
+    last_login: Optional[datetime.datetime]
 

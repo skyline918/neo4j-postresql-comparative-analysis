@@ -63,7 +63,7 @@ class PostgreSQLPlacesService(PlacesService):
                                argslist=argslist,
                                template='(%s, %s, %s, %s, st_makepoint(%s, %s))'
                                )
-                result =cursor.fetchall()
+                result = cursor.fetchall()
                 print("PSQL bulk upsert returning", result)
                 connection.commit()
 

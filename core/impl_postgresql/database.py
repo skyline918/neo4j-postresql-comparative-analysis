@@ -62,7 +62,7 @@ class PostgreSQLDatabaseBackend(DatabaseBackend):
                                "  email VARCHAR ( 255 ) UNIQUE NOT NULL, "
                                "  username VARCHAR ( 16 ) UNIQUE NOT NULL, "
                                "  password VARCHAR ( 64 ) NOT NULL, "
-                               "  balance INTEGER NOT NULL DEFAULT 0 CHECK(balance > 0), "
+                               "  balance INTEGER NOT NULL DEFAULT 0 CHECK(balance >= 0), "
                                "  created_on TIMESTAMP NOT NULL, "
                                "  last_login TIMESTAMP );")
 
@@ -76,6 +76,9 @@ class PostgreSQLDatabaseBackend(DatabaseBackend):
                                "  source_id VARCHAR(128) UNIQUE NOT NULL, "
                                "  last_updated_on TIMESTAMP DEFAULT NOW()"
                                ");")
+
+                cursor.execute("CREATE INDEX IF NOT EXISTS places_location_gist_index ON places USING GIST (location);")
+
                 cursor.execute("CREATE TABLE IF NOT EXISTS products ("
                                "  id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,"
                                "  name VARCHAR(64) UNIQUE NOT NULL, "
@@ -99,12 +102,11 @@ class PostgreSQLDatabaseBackend(DatabaseBackend):
                     "END IF; "
                     "RETURN OLD;"
                     "END;$$;")
-                cursor.execute("CREATE CONSTRAINT TRIGGER total_active_products"
-                               " AFTER INSERT OR UPDATE ON active_products"
-                               " NOT DEFERRABLE "
-                               "FOR EACH ROW EXECUTE PROCEDURE ensure_active_products_total();")
+                # cursor.execute("CREATE CONSTRAINT TRIGGER IF NOT EXISTS total_active_products"
+                #                " AFTER INSERT OR UPDATE ON active_products"
+                #                " NOT DEFERRABLE "
+                #                "FOR EACH ROW EXECUTE PROCEDURE ensure_active_products_total();")
 
-                cursor.execute("CREATE INDEX places_location_gist_index ON places USING GIST (location);")
 
                 con.commit()
         finally:

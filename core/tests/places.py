@@ -1,5 +1,4 @@
 import logging
-import time
 from pprint import pprint
 from unittest import TestCase
 from urllib.parse import urlencode
